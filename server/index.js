@@ -42,16 +42,21 @@ const upload = multer({
 
 // Helper function to upload to S3
 const uploadToS3 = async (file, folder) => {
-  const params = {
-    Bucket: bucketName,
-    Key: `${folder}/${Date.now()}-${file.originalname}`,
-    Body: file.buffer,
-    ContentType: file.mimetype,
-    ACL: "public-read",
-  };
+  try {
+    const params = {
+      Bucket: bucketName,
+      Key: `${folder}/${Date.now()}-${file.originalname}`,
+      Body: file.buffer,
+      ContentType: file.mimetype,
+      ACL: "public-read",
+    };
 
-  const data = await s3.upload(params).promise();
-  return data.Location; // Returns the public URL of the uploaded file
+    const data = await s3.upload(params).promise();
+    return data.Location; // Returns the public URL of the uploaded file
+  } catch (error) {
+    console.error("Error uploading to S3:", error.message);
+    throw error; // Re-throw the error to be handled by the route
+  }
 };
 
 // **GET /api/jobs** - Fetch all job listings
