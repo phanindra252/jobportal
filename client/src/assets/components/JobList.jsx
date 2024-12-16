@@ -166,7 +166,7 @@ const JobList = () => {
             ) : (
               <tr>
                 <td colSpan="9" className="text-center p-4">
-                  No jobs available.
+                  Loading
                 </td>
               </tr>
             )}
